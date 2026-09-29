@@ -1,4 +1,6 @@
+using CarDealershipApi.Common;
 using CarDealershipApi.Data;
+using CarDealershipApi.Data.Repositories;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
@@ -12,7 +14,11 @@ namespace CarDealershipApi
         {
             var builder = WebApplication.CreateBuilder(args);
             var connString = builder.Configuration.GetConnectionString("Default") ?? "Data Source=dealership.db;Foreign Keys=True";
+            
             builder.Services.AddSingleton(new Data.DbConnectionFactory(connString));
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            
+            builder.Services.AddSingleton<TokenService>();
             builder.Services.AddAuthenticationJwtBearer(s => s.SigningKey =
             builder.Configuration["Jwt:SigningKey"] ?? "default_signing_key")
                 .AddAuthorization()
