@@ -45,17 +45,18 @@ public static class DatabaseSeeder
         // No dealership yet: to test the 403 on car routes and POST /dealerships
         InsertUser(conn, tx, null, "no.dealership", "nodealership@test.test", "Staff", now);
 
-        // --- Cars --------------------------------------------------------
-        InsertCar(conn, tx, sydney, "Toyota", "Corolla", 2020, "White", 22990m, 45000, "Available", now);
-        InsertCar(conn, tx, sydney, "Toyota", "Camry", 2021, "Silver", 31500m, 30000, "Available", now);
-        InsertCar(conn, tx, sydney, "Mazda", "CX-5", 2019, "Red", 27990m, 62000, "Available", now);
-        InsertCar(conn, tx, sydney, "Ford", "Ranger", 2022, "Black", 48990m, 15000, "Sold", now);
+        // --- Cars (each row is a stock line of identical new vehicles) ----
+        //                          make       model      year  color     price    stock
+        InsertCar(conn, tx, sydney, "Toyota", "Corolla", 2025, "White", 32990m, 4, now);
+        InsertCar(conn, tx, sydney, "Toyota", "Camry", 2025, "Silver", 41990m, 2, now);
+        InsertCar(conn, tx, sydney, "Mazda", "CX-5", 2025, "Red", 38990m, 1, now);
+        InsertCar(conn, tx, sydney, "Ford", "Ranger", 2025, "Black", 56990m, 0, now); // out of stock
 
         // Soft-deleted: should NOT appear in GET /cars, but the row stays in the table
-        InsertCar(conn, tx, sydney, "Honda", "Civic", 2018, "Blue", 18990m, 80000, "Available", now, deletedAt: now);
+        InsertCar(conn, tx, sydney, "Honda", "Civic", 2025, "Blue", 36990m, 3, now, deletedAt: now);
 
-        InsertCar(conn, tx, melbourne, "Hyundai", "i30", 2021, "Grey", 21990m, 35000, "Available", now);
-        InsertCar(conn, tx, melbourne, "Kia", "Sportage", 2023, "White", 36990m, 8000, "Available", now);
+        InsertCar(conn, tx, melbourne, "Hyundai", "i30", 2025, "Grey", 29990m, 5, now);
+        InsertCar(conn, tx, melbourne, "Kia", "Sportage", 2025, "White", 42990m, 2, now);
 
         tx.Commit();
     }
@@ -90,10 +91,10 @@ public static class DatabaseSeeder
     private static void InsertCar(
         IDbConnection conn, IDbTransaction tx,
         long dealershipId, string make, string model, int year, string color,
-        decimal price, int mileage, string status, string now, string? deletedAt = null) =>
+        decimal price, int stock, string now, string? deletedAt = null) =>
         conn.Execute("""
-            INSERT INTO Cars (DealershipId, Make, Model, Year, Color, Price, Mileage, Status, CreatedAt, UpdatedAt, DeletedAt)
-            VALUES (@DealershipId, @Make, @Model, @Year, @Color, @Price, @Mileage, @Status, @Now, @Now, @DeletedAt);
+            INSERT INTO Cars (DealershipId, Make, Model, Year, Color, Price, Stock, CreatedAt, UpdatedAt, DeletedAt)
+            VALUES (@DealershipId, @Make, @Model, @Year, @Color, @Price, @Stock, @Now, @Now, @DeletedAt);
             """,
             new
             {
@@ -103,8 +104,7 @@ public static class DatabaseSeeder
                 Year = year,
                 Color = color,
                 Price = price,
-                Mileage = mileage,
-                Status = status,
+                Stock = stock,
                 Now = now,
                 DeletedAt = deletedAt
             },

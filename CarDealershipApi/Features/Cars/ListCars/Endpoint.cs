@@ -15,7 +15,7 @@ namespace CarDealershipApi.Features.Cars.ListCars
         public override async Task HandleAsync(Request request, CancellationToken ct)
         {
             var dealershipId = User.GetDealershipId()!.Value;
-            var results = await cars.ListAsync(dealershipId, request.Make, request.Model, request.Status?.ToString());
+            var results = await cars.ListAsync(dealershipId, request.Make, request.Model);
             await Send.OkAsync(results.Select(CarResponse.FromCar), ct);
         }
     }

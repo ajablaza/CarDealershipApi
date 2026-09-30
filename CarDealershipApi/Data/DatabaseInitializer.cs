@@ -34,8 +34,7 @@ namespace CarDealershipApi.Data
                         Year INTEGER NOT NULL,
                         Color TEXT NOT NULL,
                         Price REAL NOT NULL,
-                        Mileage INTEGER NOT NULL,
-                        Status TEXT NOT NULL DEFAULT 'Available',
+                        Stock INTEGER NOT NULL,
                         CreatedAt TEXT NOT NULL,
                         UpdatedAt TEXT NOT NULL,
                         DeletedAt TEXT NULL

@@ -10,8 +10,7 @@ namespace CarDealershipApi.Features.Cars
         public int Year { get; set; }
         public string Color { get; set; } = "";
         public decimal Price { get; set; }
-        public int Mileage { get; set; }
-        public CarStatus Status { get; set; }
+        public int Stock { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -23,8 +22,7 @@ namespace CarDealershipApi.Features.Cars
             Year = car.Year,
             Color = car.Color,
             Price = car.Price,
-            Mileage = car.Mileage,
-            Status = car.Status,
+            Stock = car.Stock,
             CreatedAt = car.CreatedAt,
             UpdatedAt = car.UpdatedAt
         };
