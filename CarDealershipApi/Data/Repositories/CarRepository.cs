@@ -6,7 +6,7 @@ namespace CarDealershipApi.Data.Repositories
     public interface ICarRepository
     {
         Task<IEnumerable<Car>> ListAsync(long dealershipId, string? make, string? model, string? status);
-        Task<Car?> GetByIdSync(long id, long dealershipId);
+        Task<Car?> GetByIdAsync(long id, long dealershipId);
         Task<Car> CreateAsync(Car car);
         Task<Car?> UpdateAsync(Car car);
         Task<bool> DeleteAsync(long id, long dealershipId);
@@ -33,7 +33,7 @@ namespace CarDealershipApi.Data.Repositories
                     Status = status 
                 });
         }
-        public async Task<Car?> GetByIdSync(long id, long dealershipId)
+        public async Task<Car?> GetByIdAsync(long id, long dealershipId)
         {
             using var conn = db.Create;
             return await conn.QuerySingleOrDefaultAsync<Car>(
