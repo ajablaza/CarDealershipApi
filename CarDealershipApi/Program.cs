@@ -18,6 +18,7 @@ namespace CarDealershipApi
             builder.Services.AddSingleton(new Data.DbConnectionFactory(connString));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ICarRepository, CarRepository>();
+            builder.Services.AddScoped<IDealershipRepository, DealershipRepository>();
 
             builder.Services.AddSingleton<TokenService>();
             builder.Services.AddAuthenticationJwtBearer(s => s.SigningKey =
