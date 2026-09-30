@@ -21,11 +21,17 @@ namespace CarDealershipApi.Data.Repositories
             return await conn.QueryAsync<Car>(
                 @"SELECT * FROM Cars
                   WHERE DealershipId = @DealershipId
-                  AND (@Make IS NULL OR Make = @Make)
-                  AND (@Model IS NULL OR Model = @Model)
+                  AND (@Make IS NULL OR Make LIKE @Make)
+                  AND (@Model IS NULL OR Model LIKE @Model)
                   AND (@Status IS NULL OR Status = @Status)
                   ORDER BY Make, Model, Id",
-                new { DealershipId = dealershipId, Make = make, Model = model, Status = status });
+                new 
+                { 
+                    DealershipId = dealershipId,
+                    Make = string.IsNullOrWhiteSpace(make) ? null : $"%{make.Trim()}%",
+                    Model = string.IsNullOrWhiteSpace(model) ? null : $"%{model.Trim()}%", 
+                    Status = status 
+                });
         }
         public async Task<Car?> GetByIdSync(long id, long dealershipId)
         {
